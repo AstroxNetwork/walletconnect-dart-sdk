@@ -11,20 +11,24 @@ extension _ICPrefix on String {
   String ic() => '${ic_method_prefix}_${this}';
 }
 
-abstract class ICWallet {
-  Future connect({
+abstract class ICWalletConnector {
+  Future<ICConnectedPayload> connect({
+    // hex string
+    required String publicKey,
+    // canister ids
     required List<String> delegationTargets,
+    // uri origin
     required String host,
     bool noUnify = false,
   });
 
-  Future<Address> address();
+  Future<ICWalletAddress> address();
 
-  Future transfer(TransferRequest req);
+  Future transfer(ICTransferRequest req);
 }
 
 class ICWalletConnectProvider extends WalletConnectProvider
-    implements ICWallet {
+    implements ICWalletConnector {
   ICWalletConnectProvider({
     required WalletConnect connector,
     required this.chainId,
@@ -34,26 +38,32 @@ class ICWalletConnectProvider extends WalletConnectProvider
   final int chainId;
 
   @override
-  Future connect({
+  Future<ICConnectedPayload> connect({
+    required String publicKey,
     required List<String> delegationTargets,
     required String host,
     bool noUnify = false,
   }) async {
     final req = {
+      'publicKey': publicKey,
       'delegationTargets': delegationTargets,
       'host': host,
       'noUnify': noUnify,
     };
-    return _wrapRequest('connect', params: req);
+    return _wrapRequest(
+      'connect',
+      params: req,
+      factory: ICConnectedPayload.fromJson,
+    );
   }
 
   @override
-  Future<Address> address() {
-    return _wrapRequest('address', factory: Address.fromJson);
+  Future<ICWalletAddress> address() {
+    return _wrapRequest('address', factory: ICWalletAddress.fromJson);
   }
 
   @override
-  Future transfer(TransferRequest req) {
+  Future transfer(ICTransferRequest req) {
     return _wrapRequest(
       'transfer',
       params: req.toJson(),

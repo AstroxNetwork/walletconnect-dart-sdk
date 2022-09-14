@@ -5,7 +5,7 @@ part 'json_rpc_request.g.dart';
 @JsonSerializable()
 class JsonRpcRequest {
   final int id;
-  @JsonKey(name: 'jsonrpc', defaultValue: '2.0')
+  @JsonKey(name: 'jsonrpc')
   final String rpc;
   final String method;
   final List<dynamic>? params;
