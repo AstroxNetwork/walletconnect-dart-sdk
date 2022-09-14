@@ -27,7 +27,7 @@ dependencies:
   # Stack trace
   stack_trace: ^1.10.0
 
-  cbor: ^4.1.0
+  cbor: 4.1.0
 
 dev_dependencies:
   # Testing framework
