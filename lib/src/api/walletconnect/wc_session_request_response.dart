@@ -43,6 +43,6 @@ class WCSessionRequestResponse {
 
   @override
   String toString() {
-    return 'WCSessionRequestResponse{approved: $approved, chainId: $chainId, accounts: $accounts, peerId: $peerId, peerMeta: $peerMeta,}';
+    return 'WCSessionRequestResponse(approved: $approved, chainId: $chainId, accounts: $accounts, peerId: $peerId, peerMeta: $peerMeta)';
   }
 }

@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:convert/convert.dart' show hex;
+import 'package:walletconnect_dart/src/api/api.dart';
 import 'package:walletconnect_dart/src/providers/providers.dart';
 import 'package:walletconnect_dart/src/utils/cbor.dart';
 import 'package:walletconnect_dart/src/walletconnect.dart';
-
-import 'ic/models.dart';
 
 const ic_method_prefix = 'ic';
 
@@ -11,24 +12,35 @@ extension _ICPrefix on String {
   String ic() => '${ic_method_prefix}_${this}';
 }
 
-abstract class ICWalletConnector {
-  Future<ICConnectedPayload> connect({
-    // hex string
-    required String publicKey,
-    // canister ids
-    required List<String> delegationTargets,
-    // uri origin
-    required String host,
-    bool noUnify = false,
-  });
+abstract class ICWalletRequestConnector {
+  Future<ICConnectResponse> connect(ICConnectRequest request);
 
-  Future<ICWalletAddress> address();
+  Future<ICWalletAddressResponse> address(String accountId);
 
-  Future transfer(ICTransferRequest req);
+  Future<ICTransferResponse> transfer(ICTransferRequest req);
+}
+
+typedef ReplyResponse<Req, Rep> = FutureOr<Rep> Function(Req request);
+
+abstract class ICWalletResponseConnector {
+  Future<void> replyAddress(
+    JsonRpcRequest request,
+    ReplyResponse<String, ICWalletAddressResponse> reply,
+  );
+
+  Future<void> replyConnect(
+    JsonRpcRequest request,
+    ReplyResponse<ICConnectRequest, ICConnectResponse> reply,
+  );
+
+  Future<void> replyTransfer(
+    JsonRpcRequest request,
+    ReplyResponse<ICTransferRequest, ICTransferResponse> reply,
+  );
 }
 
 class ICWalletConnectProvider extends WalletConnectProvider
-    implements ICWalletConnector {
+    implements ICWalletRequestConnector, ICWalletResponseConnector {
   ICWalletConnectProvider({
     required WalletConnect connector,
     required this.chainId,
@@ -38,35 +50,91 @@ class ICWalletConnectProvider extends WalletConnectProvider
   final int chainId;
 
   @override
-  Future<ICConnectedPayload> connect({
-    required String publicKey,
-    required List<String> delegationTargets,
-    required String host,
-    bool noUnify = false,
-  }) async {
-    final req = {
-      'publicKey': publicKey,
-      'delegationTargets': delegationTargets,
-      'host': host,
-      'noUnify': noUnify,
-    };
+  Future<ICConnectResponse> connect(ICConnectRequest request) async {
     return _wrapRequest(
       'connect',
-      params: req,
-      factory: ICConnectedPayload.fromJson,
+      params: request.toJson(),
+      factory: ICConnectResponse.fromJson,
     );
   }
 
   @override
-  Future<ICWalletAddress> address() {
-    return _wrapRequest('address', factory: ICWalletAddress.fromJson);
+  Future<ICWalletAddressResponse> address(String accountId) {
+    return _wrapRequest(
+      'address',
+      params: accountId,
+      factory: ICWalletAddressResponse.fromJson,
+    );
   }
 
   @override
-  Future transfer(ICTransferRequest req) {
+  Future<ICTransferResponse> transfer(ICTransferRequest req) {
     return _wrapRequest(
       'transfer',
       params: req.toJson(),
+    );
+  }
+
+  @override
+  Future<void> replyAddress(
+    JsonRpcRequest request,
+    ReplyResponse<String, ICWalletAddressResponse> reply,
+  ) async {
+    try {
+      final decoded = _decodeRequestParam<String>(request);
+      final resp = await reply(decoded);
+      return _wrapResponse(request.id, response: resp.toJson());
+    } catch (e) {
+      return _wrapResponse(request.id, error: e.toString());
+    }
+  }
+
+  @override
+  Future<void> replyConnect(
+    JsonRpcRequest request,
+    ReplyResponse<ICConnectRequest, ICConnectResponse> reply,
+  ) async {
+    try {
+      final decoded = _decodeRequestParam<ICConnectRequest>(
+        request,
+        ICConnectRequest.fromJson,
+      );
+      final resp = await reply(decoded);
+      return _wrapResponse(request.id, response: resp.toJson());
+    } catch (e) {
+      return _wrapResponse(request.id, error: e.toString());
+    }
+  }
+
+  @override
+  Future<void> replyTransfer(
+    JsonRpcRequest request,
+    ReplyResponse<ICTransferRequest, ICTransferResponse> reply,
+  ) async {
+    try {
+      final decoded = _decodeRequestParam<ICTransferRequest>(
+        request,
+        ICTransferRequest.fromJson,
+      );
+      final resp = await reply(decoded);
+      return _wrapResponse(request.id, response: resp.toJson());
+    } catch (e) {
+      return _wrapResponse(request.id, error: e.toString());
+    }
+  }
+
+  T _decodeRequestParam<T>(
+    JsonRpcRequest request, [
+    ObjectFactory<T>? factory,
+  ]) {
+    final params = request.params;
+    if (params == null || params.isEmpty) {
+      throw ArgumentError();
+    }
+    final encoded = params.first;
+    return cborDecode<T>(
+      hex.decode(encoded),
+      factory: factory,
     );
   }
 
@@ -76,13 +144,22 @@ class ICWalletConnectProvider extends WalletConnectProvider
     ObjectFactory<T>? factory,
   }) async {
     final rawParams = [if (params != null) hex.encode(cborEncode(params))];
-    print('$method req: $rawParams');
     final rep = await connector.sendCustomRequest(
       method: method.ic(),
       params: rawParams,
     );
-    final decode = cborDecode<T>(hex.decode(rep), factory: factory);
-    print('$method rep: $decode');
-    return decode;
+    return cborDecode<T>(hex.decode(rep), factory: factory);
+  }
+
+  Future<void> _wrapResponse<T>(
+    int id, {
+    T? response,
+    String? error,
+  }) async {
+    await connector.sendCustomResponse(
+      id: id,
+      result: response == null ? null : hex.encode(cborEncode(response)),
+      error: error,
+    );
   }
 }

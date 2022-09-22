@@ -25,6 +25,6 @@ class JsonRpcResponse {
 
   @override
   String toString() {
-    return 'JsonRpcResponse{id: $id, jsonrpc: $jsonrpc, result: $result}';
+    return 'JsonRpcResponse(id: $id, jsonrpc: $jsonrpc, result: $result, error: $error)';
   }
 }

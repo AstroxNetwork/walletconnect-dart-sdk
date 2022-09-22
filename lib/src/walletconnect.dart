@@ -29,6 +29,7 @@ const ethSigningMethods = [
 
 typedef OnConnectRequest = void Function(SessionStatus status);
 typedef OnSessionUpdate = void Function(WCSessionUpdateResponse response);
+typedef OnCallRequest = void Function(JsonRpcRequest request);
 typedef OnDisconnect = void Function();
 typedef OnDisplayUriCallback = void Function(String uri);
 
@@ -433,9 +434,11 @@ class WalletConnect {
   void registerListeners({
     OnConnectRequest? onConnect,
     OnSessionUpdate? onSessionUpdate,
+    OnCallRequest? onCallRequest,
     OnDisconnect? onDisconnect,
   }) {
     on<SessionStatus>('connect', (data) => onConnect?.call(data));
+    on<JsonRpcRequest>('call_request', (data) => onCallRequest?.call(data));
     on<WCSessionUpdateResponse>(
         'session_update', (data) => onSessionUpdate?.call(data));
     on('disconnect', (data) => onDisconnect?.call());
@@ -467,6 +470,7 @@ class WalletConnect {
     // Check if the incoming message is a request
     if (_isJsonRpcRequest(data)) {
       final request = JsonRpcRequest.fromJson(data);
+      _eventBus.fire(Event('call_request', request));
       _eventBus.fire(Event(request.method, request));
       return;
     }

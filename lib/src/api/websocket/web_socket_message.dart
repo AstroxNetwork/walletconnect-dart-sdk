@@ -21,6 +21,6 @@ class WebSocketMessage {
 
   @override
   String toString() {
-    return 'WebSocketMessage{topic: $topic, type: $type, payload: $payload}';
+    return 'WebSocketMessage(topic: $topic, type: $type, payload: $payload)';
   }
 }

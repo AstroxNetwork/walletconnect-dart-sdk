@@ -4,7 +4,7 @@ import 'package:convert/convert.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:walletconnect_dart/src/exceptions/exceptions.dart';
 import 'package:walletconnect_dart/src/session/peer_meta.dart';
-import 'package:walletconnect_dart/src/utils/key_converter.dart';
+import 'package:walletconnect_dart/src/utils/json_converters.dart';
 
 part 'wallet_connect_session.g.dart';
 
@@ -106,4 +106,9 @@ class WalletConnectSession {
       _$WalletConnectSessionFromJson(json);
 
   Map<String, dynamic> toJson() => _$WalletConnectSessionToJson(this);
+
+  @override
+  String toString() {
+    return 'WalletConnectSession(protocol: $protocol, version: $version, connected: $connected, accounts: $accounts, chainId: $chainId, bridge: $bridge, key: $key, clientId: $clientId, clientMeta: $clientMeta, peerId: $peerId, peerMeta: $peerMeta, handshakeId: $handshakeId, handshakeTopic: $handshakeTopic, networkId: $networkId, rpcUrl: $rpcUrl)';
+  }
 }

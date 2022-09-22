@@ -3,4 +3,9 @@ class Event<T> {
   final T data;
 
   Event(this.name, this.data);
+
+  @override
+  String toString() {
+    return 'Event(name: $name, data: $data)';
+  }
 }

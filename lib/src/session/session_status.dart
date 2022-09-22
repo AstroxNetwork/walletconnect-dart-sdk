@@ -28,6 +28,6 @@ class SessionStatus {
 
   @override
   String toString() {
-    return 'SessionStatus{chainId: $chainId, accounts: $accounts, networkUrl: $networkId, rpcUrl: $rpcUrl}';
+    return 'SessionStatus(chainId: $chainId, accounts: $accounts, networkId: $networkId, rpcUrl: $rpcUrl)';
   }
 }

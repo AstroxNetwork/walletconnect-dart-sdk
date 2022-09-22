@@ -19,6 +19,6 @@ class PeerMeta {
 
   @override
   String toString() {
-    return 'PeerMeta{url: $url, name: $name, description: $description, icons: $icons}';
+    return 'PeerMeta(url: $url, name: $name, description: $description, icons: $icons)';
   }
 }

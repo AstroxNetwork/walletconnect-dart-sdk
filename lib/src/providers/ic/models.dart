@@ -3,20 +3,55 @@ import 'package:json_annotation/json_annotation.dart';
 part 'models.g.dart';
 
 @JsonSerializable()
-class ICConnectedPayload {
-  final ICDelegationChain delegationChain;
-  final ICWalletAddress wallet;
+class ICConnectRequest {
+  ICConnectRequest({
+    required this.accountId,
+    required this.publicKey,
+    required this.delegationTargets,
+    required this.host,
+    this.noUnify = false,
+  });
 
-  ICConnectedPayload(this.delegationChain, this.wallet);
+  Map<String, dynamic> toJson() => _$ICConnectRequestToJson(this);
 
-  Map<String, dynamic> toJson() => _$ICConnectedPayloadToJson(this);
+  factory ICConnectRequest.fromJson(Map<String, dynamic> json) =>
+      _$ICConnectRequestFromJson(json);
 
-  factory ICConnectedPayload.fromJson(Map<String, dynamic> json) =>
-      _$ICConnectedPayloadFromJson(json);
+  // hex string
+  final String publicKey;
+
+  // canister ids
+  final List<String> delegationTargets;
+
+  // uri origin
+  final String host;
+  final bool noUnify;
+  final String accountId;
 
   @override
   String toString() {
-    return 'ICConnectedPayload(delegationChain: $delegationChain, wallet: $wallet)';
+    return 'ICConnectRequest(publicKey: $publicKey, delegationTargets: $delegationTargets, host: $host, noUnify: $noUnify, accountId: $accountId)';
+  }
+}
+
+@JsonSerializable()
+class ICConnectResponse {
+  final ICDelegationChain delegationChain;
+  final ICWalletAddressResponse wallet;
+
+  ICConnectResponse({
+    required this.delegationChain,
+    required this.wallet,
+  });
+
+  Map<String, dynamic> toJson() => _$ICConnectResponseToJson(this);
+
+  factory ICConnectResponse.fromJson(Map<String, dynamic> json) =>
+      _$ICConnectResponseFromJson(json);
+
+  @override
+  String toString() {
+    return 'ICConnectResponse(delegationChain: $delegationChain, wallet: $wallet)';
   }
 }
 
@@ -64,7 +99,7 @@ class ICSignedDelegation {
 
 @JsonSerializable()
 class ICDelegation {
-  final String expiration;
+  final BigInt expiration;
   @JsonKey(name: 'pubkey')
   final String publicKey;
   final List<String>? targets;
@@ -87,19 +122,19 @@ class ICDelegation {
 }
 
 @JsonSerializable()
-class ICWalletAddress {
+class ICWalletAddressResponse {
   final String principal;
   final String accountId;
 
-  ICWalletAddress({
+  ICWalletAddressResponse({
     required this.principal,
     required this.accountId,
   });
 
-  Map<String, dynamic> toJson() => _$ICWalletAddressToJson(this);
+  Map<String, dynamic> toJson() => _$ICWalletAddressResponseToJson(this);
 
-  factory ICWalletAddress.fromJson(Map<String, dynamic> json) =>
-      _$ICWalletAddressFromJson(json);
+  factory ICWalletAddressResponse.fromJson(Map<String, dynamic> json) =>
+      _$ICWalletAddressResponseFromJson(json);
 
   @override
   String toString() {
@@ -110,6 +145,7 @@ class ICWalletAddress {
 @JsonSerializable()
 class ICTransferRequest {
   ICTransferRequest({
+    required this.from,
     required this.to,
     required this.standard,
     this.amount,
@@ -124,6 +160,7 @@ class ICTransferRequest {
   factory ICTransferRequest.fromJson(Map<String, dynamic> json) =>
       _$ICTransferRequestFromJson(json);
 
+  final String from;
   final String to;
   final BigInt? amount;
 
@@ -141,6 +178,7 @@ class ICTransferRequest {
   ICTransferToken transferToken() {
     assert(isToken);
     return ICTransferToken(
+      from: from,
       to: to,
       amount: amount!,
       symbol: symbol!,
@@ -151,6 +189,7 @@ class ICTransferRequest {
   ICTransferNFT transferNFT() {
     assert(isNFT);
     return ICTransferNFT(
+      from: from,
       to: to,
       standard: standard,
       canisterId: canisterId!,
@@ -161,31 +200,64 @@ class ICTransferRequest {
 
   @override
   String toString() {
-    return 'ICTransferRequest(to: $to, amount: $amount, symbol: $symbol, standard: $standard, canisterId: $canisterId, tokenIndex: $tokenIndex, tokenIdentifier: $tokenIdentifier)';
+    return 'ICTransferRequest(from: $from, to: $to, amount: $amount, symbol: $symbol, standard: $standard, canisterId: $canisterId, tokenIndex: $tokenIndex, tokenIdentifier: $tokenIdentifier)';
   }
 }
 
+@JsonSerializable()
+class ICTransferResponse {
+  ICTransferResponse({
+    this.blockHeight,
+    required this.amount,
+    this.transactionId,
+  });
+
+  Map<String, dynamic> toJson() => _$ICTransferResponseToJson(this);
+
+  factory ICTransferResponse.fromJson(Map<String, dynamic> json) =>
+      _$ICTransferResponseFromJson(json);
+
+  final BigInt? blockHeight;
+  final String amount;
+  final String? transactionId;
+
+  @override
+  String toString() {
+    return 'ICTransferResponse(blockHeight: $blockHeight, amount: $amount, transactionId: $transactionId)';
+  }
+}
+
+@JsonSerializable()
 class ICTransferToken {
   ICTransferToken({
+    required this.from,
     required this.to,
     required this.amount,
     required this.symbol,
     required this.standard,
   });
 
+  final String from;
   final String to;
   final BigInt amount;
   final String symbol;
   final String standard;
 
+  Map<String, dynamic> toJson() => _$ICTransferTokenToJson(this);
+
+  factory ICTransferToken.fromJson(Map<String, dynamic> json) =>
+      _$ICTransferTokenFromJson(json);
+
   @override
   String toString() {
-    return 'ICTransferToken(to: $to, amount: $amount, symbol: $symbol, standard: $standard)';
+    return 'ICTransferToken(from: $from, to: $to, amount: $amount, symbol: $symbol, standard: $standard)';
   }
 }
 
+@JsonSerializable()
 class ICTransferNFT {
   ICTransferNFT({
+    required this.from,
     required this.to,
     required this.standard,
     required this.canisterId,
@@ -193,14 +265,20 @@ class ICTransferNFT {
     required this.tokenIdentifier,
   });
 
+  final String from;
   final String to;
   final String standard;
   final String canisterId;
   final int tokenIndex;
   final String tokenIdentifier;
 
+  Map<String, dynamic> toJson() => _$ICTransferNFTToJson(this);
+
+  factory ICTransferNFT.fromJson(Map<String, dynamic> json) =>
+      _$ICTransferNFTFromJson(json);
+
   @override
   String toString() {
-    return 'ICTransferNFT(to: $to, standard: $standard, canisterId: $canisterId, tokenIndex: $tokenIndex, tokenIdentifier: $tokenIdentifier)';
+    return 'ICTransferNFT(from: $from, to: $to, standard: $standard, canisterId: $canisterId, tokenIndex: $tokenIndex, tokenIdentifier: $tokenIdentifier)';
   }
 }

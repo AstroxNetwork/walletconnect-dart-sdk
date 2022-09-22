@@ -21,6 +21,6 @@ class EncryptedPayload {
 
   @override
   String toString() {
-    return 'EncryptedPayload{data: $data, hmac: $hmac, iv: $iv}';
+    return 'EncryptedPayload(data: $data, hmac: $hmac, iv: $iv)';
   }
 }

@@ -34,6 +34,6 @@ class WCSessionUpdateResponse {
 
   @override
   String toString() {
-    return 'WCSessionUpdateResponse{approved: $approved, chainId: $chainId, accounts: $accounts, networkId: $networkId, rpcUrl: $rpcUrl}';
+    return 'WCSessionUpdateResponse(approved: $approved, chainId: $chainId, accounts: $accounts, networkId: $networkId, rpcUrl: $rpcUrl)';
   }
 }

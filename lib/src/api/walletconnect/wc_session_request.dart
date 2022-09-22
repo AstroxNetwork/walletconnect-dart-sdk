@@ -29,6 +29,6 @@ class WCSessionRequest {
 
   @override
   String toString() {
-    return 'WCSessionRequest{chainId: $chainId, peerId: $peerId, peerMeta: $peerMeta}';
+    return 'WCSessionRequest(chainId: $chainId, peerId: $peerId, peerMeta: $peerMeta)';
   }
 }

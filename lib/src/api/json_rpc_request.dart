@@ -21,4 +21,9 @@ class JsonRpcRequest {
       _$JsonRpcRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$JsonRpcRequestToJson(this);
+
+  @override
+  String toString() {
+    return 'JsonRpcRequest(id: $id, rpc: $rpc, method: $method, params: $params)';
+  }
 }
