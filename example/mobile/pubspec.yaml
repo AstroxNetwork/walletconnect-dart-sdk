@@ -4,26 +4,30 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.5
 
   # WalletConnect
   walletconnect_dart:
     path: ../../
 
   # Algorand
-  algorand_dart: ^1.0.1
+  algorand_dart: ^1.0.3
 
   # Ethereum
-  web3dart: ^2.3.3
+  web3dart: ^2.4.1
 
   # URL Launcher
-  url_launcher: ^6.0.12
+  url_launcher: ^6.1.5
   qr_flutter: ^4.0.0
+  agent_dart:
+    git:
+      url: https://github.com/AstroxNetwork/agent_dart
+      ref: "4daa9ab"
 
 dev_dependencies:
   flutter_test:
