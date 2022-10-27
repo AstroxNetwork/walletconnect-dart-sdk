@@ -28,6 +28,7 @@ const ethSigningMethods = [
 ];
 
 typedef OnConnectRequest = void Function(SessionStatus status);
+typedef OnSessionRequest = void Function(WCSessionRequest request);
 typedef OnSessionUpdate = void Function(WCSessionUpdateResponse response);
 typedef OnCallRequest = void Function(JsonRpcRequest request);
 typedef OnDisconnect = void Function();
@@ -433,14 +434,15 @@ class WalletConnect {
   /// Register callback listeners.
   void registerListeners({
     OnConnectRequest? onConnect,
+    OnSessionRequest? onSessionRequest,
     OnSessionUpdate? onSessionUpdate,
     OnCallRequest? onCallRequest,
     OnDisconnect? onDisconnect,
   }) {
     on<SessionStatus>('connect', (data) => onConnect?.call(data));
     on<JsonRpcRequest>('call_request', (data) => onCallRequest?.call(data));
-    on<WCSessionUpdateResponse>(
-        'session_update', (data) => onSessionUpdate?.call(data));
+    on<WCSessionUpdateResponse>('session_update', (data) => onSessionUpdate?.call(data));
+    on<WCSessionRequest>('session_request', (data) => onSessionRequest?.call(data));
     on('disconnect', (data) => onDisconnect?.call());
   }
 
