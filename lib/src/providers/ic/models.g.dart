@@ -6,8 +6,7 @@ part of 'models.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ICConnectRequest _$ICConnectRequestFromJson(Map<String, dynamic> json) =>
-    ICConnectRequest(
+ICConnectRequest _$ICConnectRequestFromJson(Map json) => ICConnectRequest(
       accountId: json['accountId'] as String,
       publicKey: json['publicKey'] as String,
       delegationTargets: (json['delegationTargets'] as List<dynamic>)
@@ -26,49 +25,48 @@ Map<String, dynamic> _$ICConnectRequestToJson(ICConnectRequest instance) =>
       'accountId': instance.accountId,
     };
 
-ICConnectResponse _$ICConnectResponseFromJson(Map<String, dynamic> json) =>
-    ICConnectResponse(
+ICConnectResponse _$ICConnectResponseFromJson(Map json) => ICConnectResponse(
       delegationChain: ICDelegationChain.fromJson(
-          json['delegationChain'] as Map<String, dynamic>),
+          Map<String, dynamic>.from(json['delegationChain'] as Map)),
       wallet: ICWalletAddressResponse.fromJson(
-          json['wallet'] as Map<String, dynamic>),
+          Map<String, dynamic>.from(json['wallet'] as Map)),
     );
 
 Map<String, dynamic> _$ICConnectResponseToJson(ICConnectResponse instance) =>
     <String, dynamic>{
-      'delegationChain': instance.delegationChain,
-      'wallet': instance.wallet,
+      'delegationChain': instance.delegationChain.toJson(),
+      'wallet': instance.wallet.toJson(),
     };
 
-ICDelegationChain _$ICDelegationChainFromJson(Map<String, dynamic> json) =>
-    ICDelegationChain(
+ICDelegationChain _$ICDelegationChainFromJson(Map json) => ICDelegationChain(
       publicKey: json['publicKey'] as String,
       delegations: (json['delegations'] as List<dynamic>)
-          .map((e) => ICSignedDelegation.fromJson(e as Map<String, dynamic>))
+          .map((e) =>
+              ICSignedDelegation.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
     );
 
 Map<String, dynamic> _$ICDelegationChainToJson(ICDelegationChain instance) =>
     <String, dynamic>{
       'publicKey': instance.publicKey,
-      'delegations': instance.delegations,
+      'delegations': instance.delegations.map((e) => e.toJson()).toList(),
     };
 
-ICSignedDelegation _$ICSignedDelegationFromJson(Map<String, dynamic> json) =>
-    ICSignedDelegation(
+ICSignedDelegation _$ICSignedDelegationFromJson(Map json) => ICSignedDelegation(
       signature: json['signature'] as String?,
       delegation: json['delegation'] == null
           ? null
-          : ICDelegation.fromJson(json['delegation'] as Map<String, dynamic>),
+          : ICDelegation.fromJson(
+              Map<String, dynamic>.from(json['delegation'] as Map)),
     );
 
 Map<String, dynamic> _$ICSignedDelegationToJson(ICSignedDelegation instance) =>
     <String, dynamic>{
       'signature': instance.signature,
-      'delegation': instance.delegation,
+      'delegation': instance.delegation?.toJson(),
     };
 
-ICDelegation _$ICDelegationFromJson(Map<String, dynamic> json) => ICDelegation(
+ICDelegation _$ICDelegationFromJson(Map json) => ICDelegation(
       expiration: BigInt.parse(json['expiration'] as String),
       publicKey: json['pubkey'] as String,
       targets:
@@ -82,8 +80,7 @@ Map<String, dynamic> _$ICDelegationToJson(ICDelegation instance) =>
       'targets': instance.targets,
     };
 
-ICWalletAddressResponse _$ICWalletAddressResponseFromJson(
-        Map<String, dynamic> json) =>
+ICWalletAddressResponse _$ICWalletAddressResponseFromJson(Map json) =>
     ICWalletAddressResponse(
       principal: json['principal'] as String,
       accountId: json['accountId'] as String,
@@ -96,8 +93,7 @@ Map<String, dynamic> _$ICWalletAddressResponseToJson(
       'accountId': instance.accountId,
     };
 
-ICTransferRequest _$ICTransferRequestFromJson(Map<String, dynamic> json) =>
-    ICTransferRequest(
+ICTransferRequest _$ICTransferRequestFromJson(Map json) => ICTransferRequest(
       from: json['from'] as String,
       to: json['to'] as String,
       standard: json['standard'] as String,
@@ -122,8 +118,7 @@ Map<String, dynamic> _$ICTransferRequestToJson(ICTransferRequest instance) =>
       'tokenIdentifier': instance.tokenIdentifier,
     };
 
-ICTransferResponse _$ICTransferResponseFromJson(Map<String, dynamic> json) =>
-    ICTransferResponse(
+ICTransferResponse _$ICTransferResponseFromJson(Map json) => ICTransferResponse(
       blockHeight: json['blockHeight'] == null
           ? null
           : BigInt.parse(json['blockHeight'] as String),
@@ -138,8 +133,7 @@ Map<String, dynamic> _$ICTransferResponseToJson(ICTransferResponse instance) =>
       'transactionId': instance.transactionId,
     };
 
-ICTransferToken _$ICTransferTokenFromJson(Map<String, dynamic> json) =>
-    ICTransferToken(
+ICTransferToken _$ICTransferTokenFromJson(Map json) => ICTransferToken(
       from: json['from'] as String,
       to: json['to'] as String,
       amount: BigInt.parse(json['amount'] as String),
@@ -156,8 +150,7 @@ Map<String, dynamic> _$ICTransferTokenToJson(ICTransferToken instance) =>
       'standard': instance.standard,
     };
 
-ICTransferNFT _$ICTransferNFTFromJson(Map<String, dynamic> json) =>
-    ICTransferNFT(
+ICTransferNFT _$ICTransferNFTFromJson(Map json) => ICTransferNFT(
       from: json['from'] as String,
       to: json['to'] as String,
       standard: json['standard'] as String,

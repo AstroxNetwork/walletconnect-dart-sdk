@@ -6,8 +6,7 @@ part of 'wc_session_request_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-WCSessionRequestResponse _$WCSessionRequestResponseFromJson(
-        Map<String, dynamic> json) =>
+WCSessionRequestResponse _$WCSessionRequestResponseFromJson(Map json) =>
     WCSessionRequestResponse(
       approved: json['approved'] as bool? ?? false,
       chainId: json['chainId'] as int?,
@@ -18,7 +17,8 @@ WCSessionRequestResponse _$WCSessionRequestResponseFromJson(
       peerId: json['peerId'] as String?,
       peerMeta: json['peerMeta'] == null
           ? null
-          : PeerMeta.fromJson(json['peerMeta'] as Map<String, dynamic>),
+          : PeerMeta.fromJson(
+              Map<String, dynamic>.from(json['peerMeta'] as Map)),
     );
 
 Map<String, dynamic> _$WCSessionRequestResponseToJson(
@@ -28,5 +28,5 @@ Map<String, dynamic> _$WCSessionRequestResponseToJson(
       'chainId': instance.chainId,
       'accounts': instance.accounts,
       'peerId': instance.peerId,
-      'peerMeta': instance.peerMeta,
+      'peerMeta': instance.peerMeta?.toJson(),
     };

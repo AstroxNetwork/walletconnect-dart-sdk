@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'models.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class ICConnectRequest {
   ICConnectRequest({
     required this.accountId,
@@ -34,7 +34,7 @@ class ICConnectRequest {
   }
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class ICConnectResponse {
   final ICDelegationChain delegationChain;
   final ICWalletAddressResponse wallet;
@@ -55,7 +55,7 @@ class ICConnectResponse {
   }
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class ICDelegationChain {
   final String publicKey;
   final List<ICSignedDelegation> delegations;
@@ -76,7 +76,7 @@ class ICDelegationChain {
   }
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class ICSignedDelegation {
   final String? signature;
   final ICDelegation? delegation;
@@ -97,7 +97,7 @@ class ICSignedDelegation {
   }
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class ICDelegation {
   final BigInt expiration;
   @JsonKey(name: 'pubkey')
@@ -121,7 +121,7 @@ class ICDelegation {
   }
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class ICWalletAddressResponse {
   final String principal;
   final String accountId;
@@ -142,7 +142,7 @@ class ICWalletAddressResponse {
   }
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class ICTransferRequest {
   ICTransferRequest({
     required this.from,
@@ -204,7 +204,7 @@ class ICTransferRequest {
   }
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class ICTransferResponse {
   ICTransferResponse({
     this.blockHeight,
@@ -227,7 +227,7 @@ class ICTransferResponse {
   }
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class ICTransferToken {
   ICTransferToken({
     required this.from,
@@ -254,7 +254,7 @@ class ICTransferToken {
   }
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class ICTransferNFT {
   ICTransferNFT({
     required this.from,

@@ -6,7 +6,7 @@ part of 'peer_meta.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PeerMeta _$PeerMetaFromJson(Map<String, dynamic> json) => PeerMeta(
+PeerMeta _$PeerMetaFromJson(Map json) => PeerMeta(
       url: json['url'] as String?,
       name: json['name'] as String?,
       description: json['description'] as String?,

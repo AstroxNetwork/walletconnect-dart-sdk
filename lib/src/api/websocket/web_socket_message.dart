@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'web_socket_message.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class WebSocketMessage {
   final String topic;
   final String type;

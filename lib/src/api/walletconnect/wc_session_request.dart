@@ -5,7 +5,7 @@ part 'wc_session_request.g.dart';
 
 /// A request sent from the dApp to the wallet containing information about the
 /// peer and blockchain.
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class WCSessionRequest {
   @JsonKey(name: 'chainId')
   final int? chainId;

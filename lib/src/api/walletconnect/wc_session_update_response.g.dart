@@ -6,8 +6,7 @@ part of 'wc_session_update_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-WCSessionUpdateResponse _$WCSessionUpdateResponseFromJson(
-        Map<String, dynamic> json) =>
+WCSessionUpdateResponse _$WCSessionUpdateResponseFromJson(Map json) =>
     WCSessionUpdateResponse(
       approved: json['approved'] as bool? ?? false,
       chainId: json['chainId'] as int? ?? 0,

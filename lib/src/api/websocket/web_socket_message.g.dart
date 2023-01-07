@@ -6,8 +6,7 @@ part of 'web_socket_message.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-WebSocketMessage _$WebSocketMessageFromJson(Map<String, dynamic> json) =>
-    WebSocketMessage(
+WebSocketMessage _$WebSocketMessageFromJson(Map json) => WebSocketMessage(
       topic: json['topic'] as String,
       type: json['type'] as String,
       payload: json['payload'] as String,

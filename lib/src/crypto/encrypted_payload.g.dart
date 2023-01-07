@@ -6,8 +6,7 @@ part of 'encrypted_payload.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-EncryptedPayload _$EncryptedPayloadFromJson(Map<String, dynamic> json) =>
-    EncryptedPayload(
+EncryptedPayload _$EncryptedPayloadFromJson(Map json) => EncryptedPayload(
       data: json['data'] as String,
       hmac: json['hmac'] as String,
       iv: json['iv'] as String,

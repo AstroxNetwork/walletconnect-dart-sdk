@@ -6,8 +6,7 @@ part of 'json_rpc_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-JsonRpcResponse _$JsonRpcResponseFromJson(Map<String, dynamic> json) =>
-    JsonRpcResponse(
+JsonRpcResponse _$JsonRpcResponseFromJson(Map json) => JsonRpcResponse(
       id: json['id'] as int,
       jsonrpc: json['jsonrpc'] as String? ?? '2.0',
       result: json['result'],

@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'json_rpc_request.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class JsonRpcRequest {
   final int id;
   @JsonKey(name: 'jsonrpc')

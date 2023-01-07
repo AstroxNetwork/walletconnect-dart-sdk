@@ -6,8 +6,7 @@ part of 'wallet_connect_session.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-WalletConnectSession _$WalletConnectSessionFromJson(
-        Map<String, dynamic> json) =>
+WalletConnectSession _$WalletConnectSessionFromJson(Map json) =>
     WalletConnectSession(
       accounts:
           (json['accounts'] as List<dynamic>).map((e) => e as String).toList(),
@@ -20,11 +19,13 @@ WalletConnectSession _$WalletConnectSessionFromJson(
       clientId: json['clientId'] as String? ?? '',
       clientMeta: json['clientMeta'] == null
           ? null
-          : PeerMeta.fromJson(json['clientMeta'] as Map<String, dynamic>),
+          : PeerMeta.fromJson(
+              Map<String, dynamic>.from(json['clientMeta'] as Map)),
       peerId: json['peerId'] as String? ?? '',
       peerMeta: json['peerMeta'] == null
           ? null
-          : PeerMeta.fromJson(json['peerMeta'] as Map<String, dynamic>),
+          : PeerMeta.fromJson(
+              Map<String, dynamic>.from(json['peerMeta'] as Map)),
       handshakeId: json['handshakeId'] as int? ?? 0,
       handshakeTopic: json['handshakeTopic'] as String? ?? '',
       networkId: json['networkId'] as int? ?? 0,
@@ -42,9 +43,9 @@ Map<String, dynamic> _$WalletConnectSessionToJson(
       'bridge': instance.bridge,
       'key': const KeyConverter().toJson(instance.key),
       'clientId': instance.clientId,
-      'clientMeta': instance.clientMeta,
+      'clientMeta': instance.clientMeta?.toJson(),
       'peerId': instance.peerId,
-      'peerMeta': instance.peerMeta,
+      'peerMeta': instance.peerMeta?.toJson(),
       'handshakeId': instance.handshakeId,
       'handshakeTopic': instance.handshakeTopic,
       'networkId': instance.networkId,

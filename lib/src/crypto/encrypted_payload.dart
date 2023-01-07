@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'encrypted_payload.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class EncryptedPayload {
   final String data;
   final String hmac;
