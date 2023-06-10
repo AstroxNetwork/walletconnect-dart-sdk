@@ -24,10 +24,10 @@ dependencies:
   # URL Launcher
   url_launcher: ^6.1.5
   qr_flutter: ^4.0.0
-  agent_dart:
-    git:
-      url: https://github.com/AstroxNetwork/agent_dart
-      ref: "4daa9ab"
+#  agent_dart:
+#    git:
+#      url: https://github.com/AstroxNetwork/agent_dart
+#      ref: "4daa9ab"
 
 dev_dependencies:
   flutter_test:

@@ -15,10 +15,6 @@ dependencies:
 
   # Algorand
   algorand_dart: 1.0.1
-  agent_dart:
-    git:
-      url: https://github.com/AstroxNetwork/agent_dart
-      ref: "4daa9ab"
 
 dev_dependencies:
   lints: ^1.0.0

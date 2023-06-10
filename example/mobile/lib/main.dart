@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:agent_dart/agent_dart.dart';
+// import 'package:agent_dart/agent_dart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_dapp/algorand_transaction_tester.dart';
@@ -129,6 +129,9 @@ class _ICState extends State<IC> {
       child: Scaffold(
         body: Column(
           children: [
+            SizedBox(
+              height: MediaQueryData.fromWindow(window).padding.top,
+            ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -162,21 +165,21 @@ class _ICState extends State<IC> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        final identity =
-                            await Ed25519KeyIdentity.generate(null);
-                        final hex = identity.getPublicKey().toDer().toHex();
-                        final request = ICConnectRequest(
-                          accountId: _accountId!,
-                          publicKey: hex,
-                          delegationTargets: [
-                            "l2gs2-tqaaa-aaaai-qcmrq-cai",
-                            "lpbdx-syaaa-aaaai-qcmsa-cai",
-                          ],
-                          host: 'https://bridge.walletconnect.org',
-                        );
-                        log("call connect start: $request");
-                        final response = await _provider.connect(request);
-                        log("call connect end: $response");
+                        // final identity =
+                        //     await Ed25519KeyIdentity.generate(null);
+                        // final hex = identity.getPublicKey().toDer().toHex();
+                        // final request = ICConnectRequest(
+                        //   accountId: _accountId!,
+                        //   publicKey: hex,
+                        //   delegationTargets: [
+                        //     "l2gs2-tqaaa-aaaai-qcmrq-cai",
+                        //     "lpbdx-syaaa-aaaai-qcmsa-cai",
+                        //   ],
+                        //   host: 'https://bridge.walletconnect.org',
+                        // );
+                        // log("call connect start: $request");
+                        // final response = await _provider.connect(request);
+                        // log("call connect end: $response");
                       },
                       child: Text("connect"),
                     ),
@@ -261,7 +264,7 @@ class _ICState extends State<IC> {
       builder: (BuildContext context) {
         return Container(
           padding: const EdgeInsets.all(24.0),
-          child: QrImage(
+          child: QrImageView(
             data: uri,
             size: double.infinity,
           ),
@@ -347,7 +350,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             textAlign: TextAlign.center,
                           ),
                         )
-                      : QrImage(data: _displayUri),
+                      : QrImageView(data: _displayUri),
                   ElevatedButton(
                     onPressed:
                         _transactionStateToAction(context, state: _state),

@@ -65,7 +65,7 @@ class ReconnectingWebSocket {
     this.onMessage,
   });
 
-  void open(bool reconnectAttempt) {
+  Future<void> open(bool reconnectAttempt) async {
     final maxReconnectAttempts = this.maxReconnectAttempts;
     if (reconnectAttempt) {
       if (maxReconnectAttempts != null &&
@@ -80,10 +80,10 @@ class ReconnectingWebSocket {
       print('attempt-connect');
     }
 
-    // TODO migrate to IOWebSocketChannel? -> WebSocketChannel does not have
-    // TODO a way to flag for ready/connection states
-    // https://github.com/dart-lang/web_socket_channel/issues/25
     _channel = WebSocketChannel.connect(Uri.parse(url));
+
+    await _channel!.ready;
+
     _onOpen(reconnectAttempt);
 
     // Listen for messages

@@ -157,8 +157,10 @@ class WalletConnect {
   }
 
   /// Creates a new session calling [createSession] if it doesnt exists, or returns the instantiated one.
-  Future<SessionStatus> connect(
-      {int? chainId, OnDisplayUriCallback? onDisplayUri}) async {
+  Future<SessionStatus> connect({
+    int? chainId,
+    OnDisplayUriCallback? onDisplayUri,
+  }) async {
     if (connected) {
       onDisplayUri?.call(session.toUri());
       return SessionStatus(
@@ -224,6 +226,8 @@ class WalletConnect {
   Future approveSession({
     required List<String> accounts,
     required int chainId,
+    String? peerId,
+    PeerMeta? peerMeta,
   }) async {
     if (connected) {
       throw WalletConnectException('Session currently connected');
@@ -246,6 +250,9 @@ class WalletConnect {
 
     await _sendResponse(response);
     session.connected = true;
+    session.chainId = chainId;
+    session.accounts = accounts;
+    session.peerMeta = peerMeta;
 
     // Notify listeners
     _eventBus.fire(Event<SessionStatus>(
@@ -441,8 +448,10 @@ class WalletConnect {
   }) {
     on<SessionStatus>('connect', (data) => onConnect?.call(data));
     on<JsonRpcRequest>('call_request', (data) => onCallRequest?.call(data));
-    on<WCSessionUpdateResponse>('session_update', (data) => onSessionUpdate?.call(data));
-    on<WCSessionRequest>('session_request', (data) => onSessionRequest?.call(data));
+    on<WCSessionUpdateResponse>(
+        'session_update', (data) => onSessionUpdate?.call(data));
+    on<WCSessionRequest>(
+        'session_request', (data) => onSessionRequest?.call(data));
     on('disconnect', (data) => onDisconnect?.call());
   }
 
@@ -472,7 +481,9 @@ class WalletConnect {
     // Check if the incoming message is a request
     if (_isJsonRpcRequest(data)) {
       final request = JsonRpcRequest.fromJson(data);
-      _eventBus.fire(Event('call_request', request));
+      if (!{'wc_sessionRequest', 'wc_sessionUpdate'}.contains(request.method)) {
+        _eventBus.fire(Event('call_request', request));
+      }
       _eventBus.fire(Event(request.method, request));
       return;
     }
@@ -514,6 +525,7 @@ class WalletConnect {
   }
 
   Future _sendResponse(JsonRpcResponse response) async {
+    print(response);
     final key = session.key;
     if (key == null) {
       return;
