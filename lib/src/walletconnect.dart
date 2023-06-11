@@ -527,7 +527,6 @@ class WalletConnect {
   }
 
   Future _sendResponse(JsonRpcResponse response) async {
-    print(response);
     final key = session.key;
     if (key == null) {
       return;
