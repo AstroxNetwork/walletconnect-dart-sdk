@@ -59,7 +59,7 @@ class ReconnectingWebSocket {
     this.maxReconnectInterval = const Duration(milliseconds: 30000),
     this.reconnectDecay = 1.5,
     this.maxReconnectAttempts,
-    this.debug = false,
+    this.debug = true,
     this.onOpen,
     this.onClose,
     this.onMessage,

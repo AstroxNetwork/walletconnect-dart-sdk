@@ -75,15 +75,17 @@ class WalletConnect {
     required this.cipherBox,
     required SocketTransport transport,
   })  : _transport = transport,
-        _eventBus = EventBus() {
+        _eventBus = EventBus() {}
+
+  Future<void> init() async {
     // Init transport event handling
-    _initTransport();
+    await _initTransport();
 
     // Subscribe to internal events
     _subscribeToInternalEvents();
 
     if (session.handshakeTopic.isNotEmpty) {
-      transport.subscribe(topic: session.handshakeTopic);
+      _transport.subscribe(topic: session.handshakeTopic);
     }
   }
 
@@ -173,9 +175,9 @@ class WalletConnect {
   }
 
   /// Reconnects to the web socket server.
-  void reconnect() {
-    _transport.close(forceClose: true);
-    _transport.open();
+  Future<void> reconnect() async {
+    await _transport.close(forceClose: true);
+    await _transport.open();
   }
 
   /// Creates a new session between the dApp and wallet.
@@ -400,7 +402,7 @@ class WalletConnect {
       ],
     );
 
-    unawaited(_sendRequest(request));
+    _sendRequest(request);
 
     await _handleSessionDisconnect(errorMessage: message, forceClose: true);
   }
@@ -545,11 +547,11 @@ class WalletConnect {
     );
   }
 
-  void _initTransport() {
+  Future<void> _initTransport() {
     _transport.on('message', _handleIncomingMessages);
 
     // Open a new connection
-    _transport.open();
+    return _transport.open();
   }
 
   /// Handles incoming JSON RPC requests that do not have a mapped id.

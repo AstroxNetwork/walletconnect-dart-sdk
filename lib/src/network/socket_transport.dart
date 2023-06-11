@@ -28,7 +28,7 @@ class SocketTransport {
   }) : _eventBus = EventBus();
 
   /// Open a new connection to a web socket server.
-  void open({OnSocketOpen? onOpen, OnSocketClose? onClose}) {
+  Future<void> open({OnSocketOpen? onOpen, OnSocketClose? onClose}) async {
     // Connect the channel
     final wsUrl = getWebSocketUrl(
       url: url,
@@ -45,7 +45,7 @@ class SocketTransport {
       onMessage: _socketReceive,
     );
 
-    _socket?.open(false);
+    await _socket!.open(false);
 
     // Queue subscriptions
     _queueSubscriptions();
@@ -133,12 +133,14 @@ class SocketTransport {
     url = url.startsWith('https')
         ? url.replaceFirst('https', 'wss')
         : url.startsWith('http')
-            ? url.replaceFirst('http', 'ws')
-            : url;
+        ? url.replaceFirst('http', 'ws')
+        : url;
 
     final splitUrl = url.split('?');
 
-    final params = Uri.dataFromString(url).queryParameters;
+    final params = Uri
+        .dataFromString(url)
+        .queryParameters;
     final queryParams = {
       ...params,
       'protocol': protocol,

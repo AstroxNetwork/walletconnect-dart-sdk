@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:convert/convert.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 import 'package:walletconnect_dart/src/exceptions/exceptions.dart';
 import 'package:walletconnect_dart/src/session/peer_meta.dart';
 import 'package:walletconnect_dart/src/utils/json_converters.dart';
@@ -48,10 +49,12 @@ class WalletConnectSession {
 
   factory WalletConnectSession.fromUri({
     required String uri,
-    required String clientId,
-    required PeerMeta clientMeta,
+    String? clientId,
+    PeerMeta? clientMeta,
     List<String>? accounts,
   }) {
+    clientId ??= const Uuid().v4();
+    clientMeta ??= const PeerMeta();
     final protocolSeparator = uri.indexOf(':');
     final topicSeparator = uri.indexOf('@', protocolSeparator);
     final versionSeparator = uri.indexOf('?');
