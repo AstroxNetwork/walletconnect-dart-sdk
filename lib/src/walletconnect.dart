@@ -328,7 +328,7 @@ class WalletConnect {
   /// https://docs.walletconnect.com/client-api#approve-call-request
   Future approveRequest({
     required int id,
-    required String result,
+    String? result,
   }) async {
     final response = JsonRpcResponse(
       id: id,
