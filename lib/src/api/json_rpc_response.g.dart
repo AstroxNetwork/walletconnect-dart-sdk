@@ -7,7 +7,7 @@ part of 'json_rpc_response.dart';
 // **************************************************************************
 
 JsonRpcResponse _$JsonRpcResponseFromJson(Map json) => JsonRpcResponse(
-      id: json['id'] as int,
+      id: fromId(json['id']),
       jsonrpc: json['jsonrpc'] as String? ?? '2.0',
       result: json['result'],
       error: json['error'],

@@ -4,6 +4,7 @@ part 'json_rpc_request.g.dart';
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class JsonRpcRequest {
+  @JsonKey(fromJson: fromId)
   final int id;
   @JsonKey(name: 'jsonrpc')
   final String rpc;
@@ -26,4 +27,8 @@ class JsonRpcRequest {
   String toString() {
     return 'JsonRpcRequest(id: $id, rpc: $rpc, method: $method, params: $params)';
   }
+}
+
+int fromId(dynamic id) {
+  return id is int ? id : int.parse(id.toString());
 }
