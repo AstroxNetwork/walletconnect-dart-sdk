@@ -13,6 +13,9 @@ dependencies:
   walletconnect_dart:
     path: ../../
 
+  # Agent Dart
+  agent_dart: ^1.0.0-dev.20
+
   # Algorand
   algorand_dart: 1.0.1
 

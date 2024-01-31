@@ -9,7 +9,7 @@ import 'package:walletconnect_dart/src/walletconnect.dart';
 const ic_method_prefix = 'ic';
 
 extension _ICPrefix on String {
-  String ic() => '${ic_method_prefix}_${this}';
+  String ic() => '${ic_method_prefix}_$this';
 }
 
 abstract class ICWalletRequestConnector {

@@ -75,7 +75,7 @@ class WalletConnect {
     required this.cipherBox,
     required SocketTransport transport,
   })  : _transport = transport,
-        _eventBus = EventBus() {}
+        _eventBus = EventBus();
 
   Future<void> init() async {
     // Init transport event handling
@@ -402,7 +402,7 @@ class WalletConnect {
       ],
     );
 
-    _sendRequest(request);
+    unawaited(_sendRequest(request));
 
     await _handleSessionDisconnect(errorMessage: message, forceClose: true);
   }
